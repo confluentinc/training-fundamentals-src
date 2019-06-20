@@ -1,0 +1,35 @@
+version: "3.5"
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.2.1
+    hostname: zookeeper
+    networks:
+      - confluent
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: "confluentinc/cp-enterprise-kafka:5.2.1"
+    hostname: kafka
+    networks:
+      - confluent
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 101
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  producer:
+    image: cnfltraining/vp-producer:1.0
+    hostname: producer
+    restart: always
+    networks:
+      - confluent
+
+networks:
+  confluent:

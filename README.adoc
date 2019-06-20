@@ -1,33 +1,12 @@
-= Kafka Essentials
+= Confluent Fundamentals of Apache Kafka(R)
 
-This repository contains the sample code discussed and used in the Confluent course *Kafka Technical Essentials*.
+This repository contains the sample code discussed and used in the Confluent course *Confluent Fundamentals of Apache Kafka(R)*.
 
-== Build Java Examples
-
-1. From within the folder containing the `build.gradle` file run the following command:
-+
-[cols="50,50",grid="none",frame="none"]
-|===
-a|
-Bash
+Use the following command to clone this repo to your workstation:
 
 [source,subs="verbatim,quotes"]
-----
-$ *docker container run --rm \
-    -v ${PWD}:/home/gradle/project \
-    -v ${HOME}/.gradle:/root/.gradle \
-    -w /home/gradle/project \
-    frekele/gradle:latest gradle build*
-----
-a|
-Powershell
-
-[source,subs="verbatim,quotes"]
-----
-PS> *docker container run --rm `
-    -v ${PWD}:/home/gradle/project `
-    -v ${HOME}/.gradle:/root/.gradle `
-    -w /home/gradle/project `
-    frekele/gradle:latest gradle build*
-----
-|===
+--
+$ *git clone \
+    https://github.com/confluentinc/training-fundamentals-src.git \
+    ~/confluent-fundamentals*
+--
