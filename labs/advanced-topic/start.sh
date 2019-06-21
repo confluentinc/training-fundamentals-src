@@ -16,5 +16,5 @@ kafka-topics --bootstrap-server kafka:9092 \
 
 docker container run -d \
     --name producer \
-    --net explore_confluent \
+    --net advanced-topic_confluent \
     cnfltraining/vp-producer:1.0
