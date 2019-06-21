@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - VehiclePositionConsumer",
+            "request": "launch",
+            "mainClass": "clients.VehiclePositionConsumer",
+            "projectName": "consumer"
+        }
+    ]
+}
