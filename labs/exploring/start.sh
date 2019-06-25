@@ -7,6 +7,7 @@ while ! nc -z kafka 9092; do
   sleep 1.0
   echo "Kafka not yet ready..."
 done 
+echo "Kafka is now ready!"
 
 kafka-topics --bootstrap-server kafka:9092 \
     --topic vehicle-positions \
