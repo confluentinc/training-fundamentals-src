@@ -5,5 +5,4 @@ build/
 .settings
 .classpath
 bin/
-.vscode/
 _legacy
