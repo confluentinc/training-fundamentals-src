@@ -42,7 +42,7 @@ public class VehiclePositionConsumer {
                 TimeUnit.MILLISECONDS.sleep(1000);
             }
         }
-        finally{
+        finally {
             System.out.println("*** Ending VP Consumer ***");
             consumer.close();
         }
