@@ -6,3 +6,7 @@ build/
 .classpath
 bin/
 _legacy
+.idea/
+gradle/
+gradlew*
+.vscode
