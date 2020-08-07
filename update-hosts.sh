@@ -4,14 +4,14 @@ if [ "$HOSTNAME" = tools ]; then
   exit 1
 fi
 
-if grep "FUN 5.5.0-v1.0.0 host entries" /etc/hosts >/dev/null; then
+if grep "FUN host entries" /etc/hosts >/dev/null; then
   echo "Already done!"
   exit 0
 fi
 
 cat << EOF | sudo tee -a /etc/hosts >/dev/null
 
-# FUN 5.4.0-v1.0.0 host entries
+# FUN host entries
 127.0.0.1 kafka
 127.0.0.1 zookeeper
 127.0.0.1 schema-registry
