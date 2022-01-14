@@ -1,0 +1,30 @@
+github:
+  prebuilds:
+    main: true
+
+# List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
+tasks:
+  - name: Setup and Status
+    init: >
+      docker-compose pull &&
+      docker-compose up -d &&
+      setterm -linewrap off && 
+      gp sync-done setup
+    command: docker-compose exec broker bash 
+
+    
+  - name: Producing
+    init: gp sync-await setup
+    command: docker-compose exec broker bash 
+    openMode: split-right
+    
+  - name: Consuming
+    init: gp sync-await setup
+    command: docker-compose exec broker bash 
+    openMode: split-right
+
+
+# List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
+# ports:
+#   - port: 3000
+#     onOpen: open-preview
