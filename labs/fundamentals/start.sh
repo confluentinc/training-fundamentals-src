@@ -8,3 +8,7 @@ while ! nc -z kafka 9092; do
   echo "Kafka not yet ready..."
 done 
 echo "Kafka is now ready!"
+
+echo "Opening shell in docker container..."
+
+docker exec -it fundamentals-zookeeper-1 /bin/bash 
