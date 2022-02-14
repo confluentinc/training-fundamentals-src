@@ -19,3 +19,6 @@ docker container run -d \
     --name producer \
     --net exploring_confluent \
     cnfltraining/vp-producer:v2
+
+echo "Opening shell in docker container..."
+docker exec -it exploring-kafka-1 bash
