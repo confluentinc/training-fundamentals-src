@@ -1,7 +1,7 @@
 version: "3.5"
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.5.0-1-ubi8
+    image: confluentinc/cp-zookeeper:7.1.1-1-ubi8
     hostname: zookeeper
     networks:
       - confluent
@@ -12,7 +12,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
-    image: "confluentinc/cp-enterprise-kafka:5.5.0-1-ubi8"
+    image: "confluentinc/cp-server:7.1.1-1-ubi8"
     hostname: kafka
     networks:
       - confluent
@@ -30,7 +30,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
   schema-registry:
-    image: "confluentinc/cp-schema-registry:5.5.0-1-ubi8"
+    image: "confluentinc/cp-schema-registry:7.1.1-1-ubi8"
     hostname: schema-registry
     networks:
       - confluent
@@ -42,7 +42,7 @@ services:
       SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
 
   control-center:
-    image: confluentinc/cp-enterprise-control-center:5.5.0-1-ubi8
+    image: confluentinc/cp-enterprise-control-center:7.1.1-1-ubi8
     hostname: control-center
     networks:
       - confluent
@@ -63,7 +63,7 @@ services:
       CONTROL_CENTER_KSQL_ADVERTISED_URL: "http://localhost:8088"
 
   ksql-server:
-    image: "confluentinc/cp-ksqldb-server:5.5.0-1-ubi8"
+    image: "confluentinc/cp-ksqldb-server:7.1.1-1-ubi8"
     hostname: ksql-server
     ports:
       - "8088:8088"
