@@ -2,15 +2,19 @@ version: "3.5"
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.1.1-1-ubi8
+    restart: always
     hostname: zookeeper
     networks:
       - confluent
+    ports:
+      - 2181:2181
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
     image: "confluentinc/cp-server:7.1.1-1-ubi8"
+    restart: always
     hostname: kafka
     networks:
       - confluent
@@ -20,8 +24,16 @@ services:
       KAFKA_BROKER_ID: 101
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_METRIC_REPORTERS: "io.confluent.metrics.reporter.ConfluentMetricsReporter"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_LOG_RETENTION_HOURS: 1
+      KAFKA_LOG_SEGMENT_BYTES: 536870912
+      KAFKA_LOG_RETENTION_BYTES: 536870912
+      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafka:9092"
+      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
 
 networks:
   confluent:
