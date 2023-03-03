@@ -9,6 +9,8 @@ if grep "FUN host entries" /etc/hosts >/dev/null; then
   exit 0
 fi
 
+sudo sed -i '/ksqldb-server/d' /etc/hosts
+
 cat << EOF | sudo tee -a /etc/hosts >/dev/null
 
 # FUN host entries
