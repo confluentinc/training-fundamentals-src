@@ -57,6 +57,7 @@ services:
     ports:
       - 9021:9021
     environment:
+      CONTROL_CENTER_KSQL_KSQLDB_ADVERTISED_URL: "http://localhost:8088"
       CONTROL_CENTER_BOOTSTRAP_SERVERS: kafka:9092
       CONTROL_CENTER_ZOOKEEPER_CONNECT: zookeeper:2181
       CONTROL_CENTER_REPLICATION_FACTOR: 1
