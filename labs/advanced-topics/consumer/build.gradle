@@ -11,7 +11,7 @@ repositories {
 }
 
 jar {
-    baseName = 'vp-consumer'
+    archiveBaseName = 'vp-consumer'
 }
 
 sourceCompatibility = 1.8
