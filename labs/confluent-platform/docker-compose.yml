@@ -1,7 +1,6 @@
-version: "3.5"
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.1.1-1-ubi8
+    image: "confluentinc/cp-zookeeper:7.1.10-1-ubi8"
     restart: always
     hostname: zookeeper
     networks:
@@ -13,7 +12,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
-    image: "confluentinc/cp-server:7.1.1-1-ubi8"
+    image: "confluentinc/cp-server:7.1.10-1-ubi8"
     restart: always
     hostname: kafka
     networks:
@@ -36,7 +35,7 @@ services:
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
 
   schema-registry:
-    image: "confluentinc/cp-schema-registry:7.1.1-1-ubi8"
+    image: "confluentinc/cp-schema-registry:7.1.10-1-ubi8"
     restart: always
     hostname: schema-registry
     networks:
@@ -49,7 +48,7 @@ services:
       KAFKA_REST_CUB_KAFKA_TIMEOUT: 180 # https://github.com/confluentinc/cp-docker-images/issues/807
 
   control-center:
-    image: confluentinc/cp-enterprise-control-center:7.1.1-1-ubi8
+    image: "confluentinc/cp-enterprise-control-center:7.1.10-1-ubi8"
     restart: always
     hostname: control-center
     networks:
@@ -73,7 +72,7 @@ services:
     
      
   ksql-server:
-    image: "confluentinc/cp-ksqldb-server:7.1.1-1-ubi8"
+    image: "confluentinc/cp-ksqldb-server:7.1.10-1-ubi8"
     restart: always
     hostname: ksqldb-server
     ports:

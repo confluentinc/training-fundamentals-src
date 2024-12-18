@@ -1,1 +1,7 @@
-docker-compose down -v
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+docker compose down -v

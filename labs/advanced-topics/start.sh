@@ -1,6 +1,10 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
-docker-compose up -d
+set -o errexit
+set -o pipefail
+set -o nounset
+
+docker compose up -d
 
 echo "Waiting for Kafka to launch on 9092..."
 while ! nc -z kafka 9092; do   
@@ -9,13 +13,14 @@ while ! nc -z kafka 9092; do
 done 
 echo "Kafka is now ready!"
 
-kafka-topics --bootstrap-server kafka:9092 \
+kafka-topics --create \
+    --bootstrap-server kafka:9092 \
     --topic vehicle-positions \
-    --create \
     --partitions 6 \
     --replication-factor 1
 
 docker container run -d \
     --name producer \
     --net advanced-topics_confluent \
+    --platform linux/amd64 \
     cnfltraining/vp-producer:v2

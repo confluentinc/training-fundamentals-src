@@ -6,7 +6,517 @@ Use the following command to clone this repo to your workstation:
 
 [source,subs="verbatim,quotes"]
 --
-$ *git clone \
+git clone \
     https://github.com/confluentinc/training-fundamentals-src.git \
-    ~/confluent-fundamentals*
+    ~/confluent-fundamentals
+--
+
+Then running the following to set up the hosts file entries (required even when running in Docker containers).
+
+[source,subs="verbatim,quotes"]
+--
+cd ~/confluent-fundamentals
+--
+
+[source,subs="verbatim,quotes"]
+--
+./update-hosts.sh
+--
+
+== Lab 01 Exploring Apache Kafka
+
+=== Running a simple Kafka Cluster
+
+[source,subs="verbatim,quotes"]
+--
+cd labs/exploring
+--
+
+[source,subs="verbatim,quotes"]
+--
+./start.sh
+--
+
+[source,subs="verbatim,quotes"]
+--
+kafka-console-consumer \
+    --bootstrap-server kafka:9092 \
+    --topic vehicle-positions
+--
+
+### Clean up
+
+[source,subs="verbatim,quotes"]
+--
+./stop.sh
+--
+
+[source,subs="verbatim,quotes"]
+--
+cd ../..
+--
+
+## Lab 02 Fundamentals of Apache Kafka
+
+### Prerequisites
+
+[source,subs="verbatim,quotes"]
+--
+cd labs/fundamentals
+--
+
+[source,subs="verbatim,quotes"]
+--
+./start.sh
+--
+
+### Working with Topics
+
+[source,subs="verbatim,quotes"]
+--
+kafka-topics --list \
+    --bootstrap-server kafka:9092
+--
+
+[source,subs="verbatim,quotes"]
+--
+kafka-topics --create \
+    --bootstrap-server kafka:9092 \
+    --topic vehicle-positions \
+    --partitions 6 \
+    --replication-factor 1
+--
+
+[source,subs="verbatim,quotes"]
+--
+kafka-topics --describe \
+    --bootstrap-server kafka:9092 \
+    --topic vehicle-positions
+--
+
+[source,subs="verbatim,quotes"]
+--
+kafka-topics --delete \
+    --bootstrap-server kafka:9092 \
+    --topic test-topic
+--
+
+### Producing and consuming data
+
+[source,subs="verbatim,quotes"]
+--
+# TODO - add the commands
+--
+
+### Using the ZooKeeper Shell
+
+[source,subs="verbatim,quotes"]
+--
+# TODO - add the commands
+--
+
+### Clean up
+
+[source,subs="verbatim,quotes"]
+--
+./stop.sh
+--
+
+[source,subs="verbatim,quotes"]
+--
+cd ../..
+--
+
+== Lab 03 How Kafka Works
+
+### Prerequisites
+
+If you don't already have it installed, you can install the `watch` command using Homebrew:
+
+[source,subs="verbatim,quotes"]
+--
+brew install watch
+--
+
+[source,subs="verbatim,quotes"]
+--
+cd labs/advanced-topics
+--
+
+[source,subs="verbatim,quotes"]
+--
+./start.sh
+--
+
+[source,subs="verbatim,quotes"]
+--
+cd consumer
+--
+
+### Building the Consumer Docker image
+
+[source,subs="verbatim,quotes"]
+--
+./build-image.sh
+--
+
+### Running and scaling our consumer
+
+[source,subs="verbatim,quotes"]
+--
+./run-consumer.sh
+--
+
+[source,subs="verbatim,quotes"]
+--
+kafka-consumer-groups \
+    --bootstrap-server kafka:9092 \
+    --group vp-consumer \
+    --describe
+--
+
+Open a new terminal window for running the `watch` command
+
+[source,subs="verbatim,quotes"]
+--
+watch kafka-consumer-groups \
+    --bootstrap-server kafka:9092 \
+    --group vp-consumer \
+    --describe
+--
+
+In the oringinal terminal window, scale the consumer by running more instances of it.
+
+[source,subs="verbatim,quotes"]
+--
+./run-consumer.sh
+--
+
+View the terminal window that is running `watch` to see the consumer group rebalance.
+
+### Scale down the consumer
+
+View the list of running containers:
+
+[source,subs="verbatim,quotes"]
+--
+docker ps
+--
+
+You should see output similar to the following:
+
+[source,subs="verbatim,quotes"]
+--
+CONTAINER ID   IMAGE                                     COMMAND                  CREATED          STATUS          PORTS                                        NAMES
+9eb7c7aedd9a   sample-consumer:1.0                       "java -classpath lib…"   34 minutes ago   Up 34 minutes                                                festive_mclean
+2979688ac205   sample-consumer:1.0                       "java -classpath lib…"   35 minutes ago   Up 35 minutes                                                tender_cannon
+a9212a6beb57   cnfltraining/vp-producer:v2               "/bin/sh -c 'java -c…"   53 minutes ago   Up 53 minutes                                                producer
+be0fe4e039e8   confluentinc/cp-zookeeper:7.1.10-1-ubi8   "/etc/confluent/dock…"   53 minutes ago   Up 53 minutes   2888/tcp, 0.0.0.0:2181->2181/tcp, 3888/tcp   advanced-topics-zookeeper-1
+453f6e962ee0   confluentinc/cp-server:7.1.10-1-ubi8      "/etc/confluent/dock…"   53 minutes ago   Up 2 minutes    0.0.0.0:9092->9092/tcp                       advanced-topics-kafka-1
+--
+
+View the logs of one of the consumer containers (using the container name from the NAMES column in the `docker ps` output):
+
+[source,subs="verbatim,quotes"]
+--
+docker logs -f CONTAINER_NAME
+--
+
+Exit the log view by pressing CTRL-c.
+
+Stop one of the consumer containers:
+
+[source,subs="verbatim,quotes"]
+--
+docker rm -f CONTAINER_NAME
+--
+
+View the terminal window that is running `watch` to see the consumer group rebalance.
+
+### Cleanup
+
+[source,subs="verbatim,quotes"]
+--
+cd ..
+--
+
+[source,subs="verbatim,quotes"]
+--
+./stop.sh
+--
+
+[source,subs="verbatim,quotes"]
+--
+cd ../..
+--
+
+## Lab 04 Integrating Kafka into your Environment
+
+### Prerequisites
+
+[source,subs="verbatim,quotes"]
+--
+cd labs/ecosystem
+--
+
+[source,subs="verbatim,quotes"]
+--
+./start.sh
+--
+
+### Verify the ecosystem services are ready to use
+
+Later in the lab we will create an MQTT source connector to obtain live train data from a public MQTT broker. To verify that the MQTT source connector is available, run the following command:
+
+[source,subs="verbatim,quotes"]
+--
+curl -s http://connect:8083/connector-plugins | jq .
+--
+
+You should see output similar to the following:
+
+[source,subs="verbatim,quotes"]
+--
+[
+  {
+    "class": "io.confluent.connect.mqtt.MqttSinkConnector",
+    "type": "sink",
+    "version": "1.7.3"
+  },
+  {
+    "class": "io.confluent.connect.mqtt.MqttSourceConnector",
+    "type": "source",
+    "version": "1.7.3"
+  },
+  {
+    "class": "org.apache.kafka.connect.mirror.MirrorCheckpointConnector",
+    "type": "source",
+    "version": "1"
+  },
+  {
+    "class": "org.apache.kafka.connect.mirror.MirrorHeartbeatConnector",
+    "type": "source",
+    "version": "1"
+  },
+  {
+    "class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
+    "type": "source",
+    "version": "1"
+  }
+]
+--
+
+### Generating and Consuming Avro Messages
+
+[source,subs="verbatim,quotes"]
+--
+kafka-topics \
+    --bootstrap-server kafka:9092 \
+    --create \
+    --topic stations-avro \
+    --partitions 1 \
+    --replication-factor 1
+--
+
+[source,subs="verbatim,quotes"]
+--
+export SCHEMA='{ "type":"record",
+        "name":"station",
+        "fields":[
+            {"name":"city","type":"string"},
+            {"name":"country","type":"string"}
+        ]
+}'
+--
+
+[source,subs="verbatim,quotes"]
+--
+kafka-avro-console-producer \
+    --broker-list kafka:9092 \
+    --topic stations-avro \
+    --property schema.registry.url=http://schema-registry:8081 \
+    --property value.schema="$SCHEMA"
+--
+
+[source,subs="verbatim,quotes"]
+--
+{"city": "Pretoria", "country": "South Africa"}
+--
+
+[source,subs="verbatim,quotes"]
+--
+{"city": "Cairo", "country": "Egypt"}
+--
+
+[source,subs="verbatim,quotes"]
+--
+{"city": "Nairobi", "country": "Kenya"}
+--
+
+[source,subs="verbatim,quotes"]
+--
+{"city": "Addis Ababa", "country": "Ethiopia"}
+--
+
+Exit the `kafka-avro-console-producer` by pressing CTRL-c.
+
+[source,subs="verbatim,quotes"]
+--
+kafka-avro-console-consumer \
+    --bootstrap-server kafka:9092 \
+    --topic stations-avro \
+    --from-beginning \
+    --property schema.registry.url=http://schema-registry:8081
+--
+
+Exit the `kafka-avro-console-consumer` by pressing CTRL-c.
+
+### Using Kafka Connect to Import MQTT Data
+
+[source,subs="verbatim,quotes"]
+--
+kafka-topics \
+    --bootstrap-server kafka:9092 \
+    --create \
+    --topic vehicle-positions \
+    --partitions 6 \
+    --replication-factor 1
+--
+
+[source,subs="verbatim,quotes"]
+--
+curl -s -X POST -H 'Content-Type: application/json' -d '{ "name" : "mqtt-source",
+"config" : {
+        "connector.class" :
+"io.confluent.connect.mqtt.MqttSourceConnector",
+        "tasks.max" : "1",
+        "mqtt.server.uri" : "tcp://mqtt.hsl.fi:1883",
+        "mqtt.topics" : "/hfp/v2/journey/ongoing/vp/train/#",
+        "kafka.topic" : "vehicle-positions",
+        "confluent.topic.bootstrap.servers": "kafka:9092",
+        "confluent.topic.replication.factor": "1",
+        "confluent.license":"",
+        "key.converter":
+"org.apache.kafka.connect.storage.StringConverter",
+        "value.converter":
+"org.apache.kafka.connect.converters.ByteArrayConverter"
+        }
+    }' http://connect:8083/connectors | jq .
+--
+To see a list of all connectors, run the following command:
+
+[source,subs="verbatim,quotes"]
+--
+curl -s http://connect:8083/connectors | jq .
+--
+
+You can view the status of the connector by running the following command:
+
+[source,subs="verbatim,quotes"]
+--
+curl -s http://connect:8083/connectors/mqtt-source/status | jq .
+--
+
+[source,subs="verbatim,quotes"]
+--
+kafka-console-consumer \
+    --bootstrap-server kafka:9092 \
+    --topic vehicle-positions \
+    --from-beginning \
+    --max-messages 5
+--
+
+### Cleanup
+
+[source,subs="verbatim,quotes"]
+--
+./stop.sh
+--
+
+[source,subs="verbatim,quotes"]
+--
+cd ../..
+--
+
+## Lab 05 The Confluent Platform
+
+### Prerequisites
+
+[source,subs="verbatim,quotes"]
+--
+labs/confluent-platform
+--
+
+[source,subs="verbatim,quotes"]
+--
+./start.sh
+--
+
+### Using ksqlDB for simple real-time stream transformations
+
+[source,subs="verbatim,quotes"]
+--
+SHOW topics;
+--
+
+[source,subs="verbatim,quotes"]
+--
+PRINT 'vehicle-positions';
+--
+
+[source,subs="verbatim,quotes"]
+--
+CREATE STREAM vehicle_positions(
+    VP STRUCT<
+        desi  STRING,
+        dir  STRING,
+        oper  INTEGER,
+        veh  INTEGER,
+        tst  STRING,
+        tsi  BIGINT,
+        spd  DOUBLE,
+        hdg  INTEGER,
+        lat  DOUBLE,
+        long  DOUBLE,
+        acc  DOUBLE,
+        dl  INTEGER,
+        odo  INTEGER,
+        drst  INTEGER,
+        oday  STRING,
+        jrn  INTEGER,
+        line  INTEGER,
+        start  STRING,
+        loc  STRING,
+        stop  STRING,
+        route  STRING,
+        occu  INTEGER,
+        seq  INTEGER
+    >
+) WITH(KAFKA_TOPIC='vehicle-positions', VALUE_FORMAT='JSON');
+--
+
+It may take several seconds after running these commands for the results to appear.
+
+[source,subs="verbatim,quotes"]
+--
+SELECT vp->desi, vp->dir FROM VEHICLE_POSITIONS EMIT CHANGES;
+--
+
+[source,subs="verbatim,quotes"]
+--
+SELECT * FROM VEHICLE_POSITIONS
+    WHERE vp->desi='600'
+    EMIT CHANGES;
+--
+
+### Cleanup
+
+[source,subs="verbatim,quotes"]
+--
+./stop.sh
+--
+
+[source,subs="verbatim,quotes"]
+--
+cd ../..
 --

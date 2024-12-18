@@ -1,4 +1,9 @@
-#/bin/bash
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
 if [ "$HOSTNAME" = tools ]; then
   echo "We don't need to update hosts in the tools container. Exiting."
   exit 1
@@ -9,7 +14,7 @@ if grep "FUN host entries" /etc/hosts >/dev/null; then
   exit 0
 fi
 
-sudo sed -i '/ksqldb-server/d' /etc/hosts
+sudo sed -i '' '/ksqldb-server/d' /etc/hosts
 
 cat << EOF | sudo tee -a /etc/hosts >/dev/null
 
