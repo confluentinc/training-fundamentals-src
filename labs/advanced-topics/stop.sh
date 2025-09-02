@@ -5,4 +5,4 @@ docker container ls | grep sample-consumer | awk '{ print $1 }' | xargs docker c
 # Remove the producer
 docker container rm -f producer
 # remove the Kafka cluster
-docker-compose down -v
+docker compose down -v

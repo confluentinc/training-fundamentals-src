@@ -10,10 +10,6 @@ repositories {
     maven { url 'https://packages.confluent.io/maven/' }
 }
 
-jar {
-    baseName = 'vp-consumer'
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 

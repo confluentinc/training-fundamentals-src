@@ -1,6 +1,6 @@
 #! /bin/bash
 
-docker-compose up -d
+docker compose up -d
 
 echo "Waiting for Kafka to launch on 9092..."
 while ! nc -z kafka 9092; do   
