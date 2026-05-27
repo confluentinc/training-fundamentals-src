@@ -39,7 +39,7 @@ kafka-topics --bootstrap-server kafka:9092 \
     --create \
     --if-not-exists \
     --partitions 6 \
-    --replication-factor 1 
+    --replication-factor 1
 
 cat << EOF
 Topic created.
