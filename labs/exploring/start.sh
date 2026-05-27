@@ -37,6 +37,7 @@ EOF
 kafka-topics --bootstrap-server kafka:9092 \
     --topic vehicle-positions \
     --create \
+    --if-not-exists \
     --partitions 6 \
     --replication-factor 1
 
@@ -49,7 +50,7 @@ EOF
 docker container run -d \
     --name producer \
     --net exploring_confluent \
-    cnfltraining/vp-producer:v2
+    cnfltraining/vp-producer-fallback:v2
 
 echo "Producer up and running!"
 
